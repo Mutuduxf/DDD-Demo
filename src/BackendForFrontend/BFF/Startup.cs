@@ -34,12 +34,12 @@ namespace BFF
                     classes.Where(@class => @class.Name.EndsWith("QueryService", StringComparison.OrdinalIgnoreCase)))
                 .AsSelf().WithScopedLifetime());
             //由于Q端直接连数据库，以下示范不同数据库的注册
-            services.AddScoped<IDbConnection>(_ => new SqlConnection(
-                "server=192.168.78.152;database=TestDB;User=sa;password=123qweasd,./;Connect Timeout=30;Pooling=true;Min Pool Size=100;"));
             services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(
-                "Host=192.168.78.152;Username=postgres;Password=123qweasd,./;Database=postgres"));
-            services.AddScoped<IDbConnection>(_ => new MySqlConnection(
-                "Database=TestDB;Data Source=192.168.78.152;User Id=root;Password=123;CharSet=utf8;port=3306"));
+                "Host=192.168.78.140;Username=postgres;Password=postgres;Database=postgres"));
+            // services.AddScoped<IDbConnection>(_ => new SqlConnection(
+            //     "server=192.168.78.140;database=TestDB;User=sa;password=123;Connect Timeout=30;Pooling=true;Min Pool Size=100;"));
+            // services.AddScoped<IDbConnection>(_ => new MySqlConnection(
+            //     "Database=TestDB;Data Source=192.168.78.140;User Id=root;Password=123;CharSet=utf8;port=3306"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

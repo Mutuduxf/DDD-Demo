@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application;
 using Domain.AggregateRoots;
@@ -21,10 +22,34 @@ namespace ServiceHost.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<IList<User>> Get()
+        [HttpGet("~/GetAll")]
+        public async Task<IList<User>> GetAll()
         {
             return await _userApplicationService.GetAllUsersAsync();
+        }
+
+        [HttpGet]
+        public async Task<User> Get(Guid id)
+        {
+            return await _userApplicationService.GetUserAsync(id);
+        }
+
+        [HttpPost]
+        public async Task AddUser()
+        {
+            await _userApplicationService.AddUser();
+        }
+
+        [HttpPut("~/changename")]
+        public async Task ChangeNameAsync(Guid userId, string name)
+        {
+            await _userApplicationService.ChangeNameAsync(userId, name);
+        }
+
+        [HttpPut("~/celebratebirthday")]
+        public async Task CelebrateBirthdayAsync(Guid userId)
+        {
+            await _userApplicationService.CelebrateBirthdayAsync(userId);
         }
     }
 }

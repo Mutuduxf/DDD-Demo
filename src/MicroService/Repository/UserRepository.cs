@@ -1,29 +1,34 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Domain.AggregateRoots;
 using Domain.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
     public class UserRepository : IUserRepository
     {
-        private static readonly IList<User> Users = new List<User>();
+        private readonly CustomDbContext _dbContext;
+
+        public UserRepository(CustomDbContext customDbContext)
+        {
+            _dbContext = customDbContext;
+        }
         
         public async Task AddAsync(User user)
         {
-            Users.Add(user);
+            await _dbContext.Users.AddAsync(user);
         }
 
         public async Task<User> GetAsync(Guid id)
         {
-            return Users.FirstOrDefault(p => p.Id == id);
+            return await _dbContext.Users.FindAsync(id);
         }
 
         public async Task<IList<User>> GetAllAsync()
         {
-            return Users;
+            return await _dbContext.Users.ToListAsync();
         }
     }
 }
