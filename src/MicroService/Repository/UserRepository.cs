@@ -25,10 +25,5 @@ namespace Repository
         {
             return Users;
         }
-
-        public void Add(User user)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

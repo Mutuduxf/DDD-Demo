@@ -1,5 +1,7 @@
 # DDD-Demo
 
+---
+
 * 简介：此Demo用于展示DDD微服务的代码组织以及各层职责。
 * 准备：出于git管理的考虑，优先使用文本格式的工具撰写脑图和UML/流程图/组织结构图等，请先准备好以下工具：
   * 脑图：后缀名km，请安装visual studio code插件vscode-mindmap。
