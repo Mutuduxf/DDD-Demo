@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Domain.AggregateRoots;
 using Domain.IRepositories;
+using Domain.ValueObjects;
 using Zaaby.DDD.Abstractions.Domain;
 
 namespace Domain.DomainServices
@@ -22,7 +24,8 @@ namespace Domain.DomainServices
 
         public async Task AddUser()
         {
-            var user = new User(Guid.NewGuid(), DateTime.UtcNow.ToString(), DateTime.UtcNow.Hour);
+            var user = new User(Guid.NewGuid(), DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
+                DateTime.UtcNow.Hour, Gender.Female, "CN", "GuangDong", "GuangZhou", "YueXiu");
             await _userRepository.AddAsync(user);
         }
 
