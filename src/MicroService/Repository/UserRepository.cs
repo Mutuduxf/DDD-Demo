@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Domain.AggregateRoots;
 using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
-using Repository.DbContext;
 
 namespace Repository
 {

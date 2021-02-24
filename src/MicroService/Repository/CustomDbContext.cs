@@ -1,9 +1,10 @@
 using Domain.AggregateRoots;
 using Microsoft.EntityFrameworkCore;
+using Repository.EntityConfigurations;
 
-namespace Repository.DbContext
+namespace Repository
 {
-    public sealed class CustomDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public sealed class CustomDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
 
@@ -14,8 +15,7 @@ namespace Repository.DbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.BuildUser();
+            modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         }
     }
 }

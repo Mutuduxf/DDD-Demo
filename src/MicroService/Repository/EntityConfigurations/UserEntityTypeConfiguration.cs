@@ -1,31 +1,33 @@
 using Domain.AggregateRoots;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Repository.DbContext
+namespace Repository.EntityConfigurations
 {
-    public static class UserBuilder
+    public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
-        public static ModelBuilder BuildUser(this ModelBuilder modelBuilder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
-            var userBuilder = modelBuilder.Entity<User>();
-            userBuilder.ToTable("User")
-                .HasKey(user => user.Id);
+            builder.ToTable("User");
 
-            userBuilder.Ignore(user => user.DomainEvents);
+            builder.HasKey(user => user.Id);
 
-            userBuilder.Property(user => user.Name)
+            builder.Ignore(user => user.DomainEvents);
+
+            builder.Property(user => user.Name)
                 .HasColumnType("varchar(255)")
                 .IsRequired();
 
-            userBuilder.Property(user => user.Age)
+            builder.Property(user => user.Age)
                 .HasColumnType("integer")
                 .IsRequired();
 
-            userBuilder.Property(user => user.Gender)
+            builder.Property(user => user.Gender)
                 .HasColumnType("integer")
                 .IsRequired();
 
-            userBuilder.OwnsOne(user => user.Address, addressBuilder =>
+            //值类型没有Id，ORM将其转换为主表的多个字段
+            builder.OwnsOne(user => user.Address, addressBuilder =>
             {
                 addressBuilder.Property(address => address.Country)
                     .HasColumnType("varchar(25)");
@@ -37,18 +39,18 @@ namespace Repository.DbContext
                     .HasColumnType("varchar(25)");
             });
 
-            userBuilder.Property(user => user.Tags)
+            //集合/数组使用jsonb字段类型
+            builder.Property(user => user.Tags)
                 .HasColumnType("jsonb")
                 .IsRequired();
 
-            userBuilder.OwnsMany(user => user.Cards, cardBuilder =>
+            //聚合内的子实体ORM会自动在子表中加上对应的外键
+            builder.OwnsMany(user => user.Cards, cardBuilder =>
             {
                 cardBuilder.HasKey(card => card.Id);
                 cardBuilder.Property(card => card.Name)
                     .HasColumnType("varchar(25)");
             });
-
-            return modelBuilder;
         }
     }
 }
