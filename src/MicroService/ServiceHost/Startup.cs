@@ -50,6 +50,8 @@ namespace ServiceHost
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<UowMiddleware>();
+            
             app.UseRouting();
 
             app.UseAuthorization();
