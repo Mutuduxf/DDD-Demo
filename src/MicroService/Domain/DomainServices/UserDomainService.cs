@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using Domain.AggregateRoots;
+using Domain.Entities;
 using Domain.IRepositories;
-using Domain.ValueObjects;
 using Zaaby.DDD.Abstractions.Domain;
 
 namespace Domain.DomainServices
@@ -22,10 +21,8 @@ namespace Domain.DomainServices
 
         public async Task<User> GetUserAsync(Guid userId) => await _userRepository.GetAsync(userId);
 
-        public async Task AddUser()
+        public async Task AddUser(User user)
         {
-            var user = new User(Guid.NewGuid(), DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
-                DateTime.UtcNow.Hour, Gender.Female, "CN", "GuangDong", "GuangZhou", "YueXiu");
             await _userRepository.AddAsync(user);
         }
 
@@ -39,6 +36,18 @@ namespace Domain.DomainServices
         {
             var user = await _userRepository.GetAsync(userId);
             user?.CelebrateBirthday();
+        }
+
+        public async Task SetTags(Guid userId, params string[] tags)
+        {
+            var user = await _userRepository.GetAsync(userId);
+            user?.SetTags(tags);
+        }
+
+        public async Task AddCard(Guid userId, Card card)
+        {
+            var user = await _userRepository.GetAsync(userId);
+            user?.AddCard(card);
         }
     }
 }

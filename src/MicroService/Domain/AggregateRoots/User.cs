@@ -35,9 +35,11 @@ namespace Domain.AggregateRoots
 
         public Gender Gender { get; protected set; }
 
-        public IReadOnlyList<string> Tags { get; protected set; } = new List<string>();
+        private List<string> _tags = new();
+        public IReadOnlyList<string> Tags => _tags;
 
-        public IReadOnlyList<Card> Cards { get; protected set; } = new List<Card>();
+        private List<Card> _cards = new();
+        public IReadOnlyList<Card> Cards => _cards;
 
         private User()
         {
@@ -48,8 +50,6 @@ namespace Domain.AggregateRoots
         {
             if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
             (Id, Name, Age, Gender, Address) = (id, name, age, gender, new Address(country, state, city, street));
-            SetTags(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-            SetCards(new Card(Guid.NewGuid(), "apple"), new Card(Guid.NewGuid(), "pear"));
         }
 
         public void ChangeName(string name) => Name = name;
@@ -58,12 +58,12 @@ namespace Domain.AggregateRoots
 
         public void SetTags(params string[] tags)
         {
-            Tags = tags?.ToList() ?? new List<string>();
+            _tags = tags.Distinct().ToList();
         }
 
-        public void SetCards(params Card[] cards)
+        public void AddCard(Card card)
         {
-            Cards = cards?.ToList() ?? new List<Card>();
+            _cards.Add(card);
         }
     }
 }

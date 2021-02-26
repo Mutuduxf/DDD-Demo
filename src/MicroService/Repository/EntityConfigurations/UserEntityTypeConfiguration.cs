@@ -47,9 +47,13 @@ namespace Repository.EntityConfigurations
             //聚合内的子实体ORM会自动在子表中加上对应的外键
             builder.OwnsMany(user => user.Cards, cardBuilder =>
             {
+                cardBuilder.ToTable("Card");
                 cardBuilder.HasKey(card => card.Id);
+                //子实体Id不需要自动生成https://github.com/npgsql/efcore.pg/issues/971
+                cardBuilder.Property(card => card.Id).ValueGeneratedNever();
                 cardBuilder.Property(card => card.Name)
-                    .HasColumnType("varchar(25)");
+                    .HasColumnType("varchar(25)")
+                    .IsRequired();
             });
         }
     }

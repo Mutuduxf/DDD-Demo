@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain.AggregateRoots;
 using Domain.DomainServices;
+using Domain.Entities;
+using Domain.ValueObjects;
 using Zaaby.DDD.Abstractions.Application;
 
 namespace Application
@@ -25,10 +28,13 @@ namespace Application
         {
             return await _userDomainService.GetUserAsync(userId);
         }
-
+        
         public async Task AddUser()
         {
-            await _userDomainService.AddUser();
+            //注意:不要使用自增字段，使用自增字段相当于要先持久化才能获取到Id，实际上是破坏了聚合的完整性。
+            var user = new User(Guid.NewGuid(), "This is user name",
+                DateTime.UtcNow.Hour, Gender.Female, "CN", "GuangDong", "GuangZhou", "YueXiu");
+            await _userDomainService.AddUser(user);
         }
 
         public async Task ChangeNameAsync(Guid userId, string name)
@@ -39,6 +45,16 @@ namespace Application
         public async Task CelebrateBirthdayAsync(Guid userId)
         {
             await _userDomainService.CelebrateBirthdayAsync(userId);
+        }
+        
+        public async Task SetTags(Guid userId, IEnumerable<string> tags)
+        {
+            await _userDomainService.SetTags(userId, tags.ToArray());
+        }
+
+        public async Task AddCard(Guid userId, string cardName)
+        {
+            await _userDomainService.AddCard(userId, new Card(Guid.NewGuid(), cardName));
         }
     }
 }
