@@ -27,7 +27,7 @@ namespace ServiceHost
             //自动注册DDD各层
             services.AddDDD();
             //注册EF用于C端仓储层
-            services.AddDbContext<CustomDbContext>(options=>
+            services.AddDbContext<CustomDbContext>(options =>
                 options.UseNpgsql("Host=192.168.78.140;Username=postgres;Password=postgres;Database=postgres"));
             //使用上面已注册的pgsql上下文再次注册DbContext以用于框架内注入提交UOW
             services.AddScoped<DbContext>(p => p.GetService<CustomDbContext>());
@@ -51,7 +51,7 @@ namespace ServiceHost
             app.UseHttpsRedirection();
 
             app.UseMiddleware<UowMiddleware>();
-            
+
             app.UseRouting();
 
             app.UseAuthorization();
