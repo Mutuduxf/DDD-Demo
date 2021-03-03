@@ -47,14 +47,14 @@ namespace Application
             await _userDomainService.CelebrateBirthdayAsync(userId);
         }
         
-        public async Task SetTags(Guid userId, IEnumerable<string> tags)
+        public async Task SetTagsAsync(Guid userId, IEnumerable<string> tags)
         {
-            await _userDomainService.SetTags(userId, tags.ToArray());
+            await _userDomainService.SetTagsAsync(userId, tags.ToArray());
         }
 
-        public async Task AddCard(Guid userId, string cardName)
+        public async Task AddCardAsync(Guid userId, string cardName)
         {
-            await _userDomainService.AddCard(userId, new Card(Guid.NewGuid(), cardName));
+            await _userDomainService.AddCardAsync(userId, new Card(Guid.NewGuid(), cardName));
         }
     }
 }

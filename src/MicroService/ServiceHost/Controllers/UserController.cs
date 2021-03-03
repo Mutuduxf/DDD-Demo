@@ -49,15 +49,15 @@ namespace ServiceHost.Controllers
         }
 
         [HttpPut("~/settags")]
-        public async Task SetTags(Guid userId, [FromBody] IEnumerable<string> tags)
+        public async Task SetTagsAsync(Guid userId, [FromBody] IEnumerable<string> tags)
         {
-            await _userApplicationService.SetTags(userId, tags);
+            await _userApplicationService.SetTagsAsync(userId, tags);
         }
 
         [HttpPut("~/addcard")]
-        public async Task AddCard(Guid userId, [FromBody] string cardName)
+        public async Task AddCardAsync(Guid userId, [FromBody] string cardName)
         {
-            await _userApplicationService.AddCard(userId, cardName);
+            await _userApplicationService.AddCardAsync(userId, cardName);
         }
     }
 }

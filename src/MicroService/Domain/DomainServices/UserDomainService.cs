@@ -38,13 +38,13 @@ namespace Domain.DomainServices
             user?.CelebrateBirthday();
         }
 
-        public async Task SetTags(Guid userId, params string[] tags)
+        public async Task SetTagsAsync(Guid userId, params string[] tags)
         {
             var user = await _userRepository.GetAsync(userId);
             user?.SetTags(tags);
         }
 
-        public async Task AddCard(Guid userId, Card card)
+        public async Task AddCardAsync(Guid userId, Card card)
         {
             var user = await _userRepository.GetAsync(userId);
             user?.AddCard(card);
