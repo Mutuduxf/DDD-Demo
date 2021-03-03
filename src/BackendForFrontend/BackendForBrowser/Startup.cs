@@ -1,17 +1,15 @@
 using System;
 using System.Data;
-using System.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MySql.Data.MySqlClient;
+using Microsoft.OpenApi.Models;
 using Npgsql;
 using QueryService;
 
-namespace BFF
+namespace BackendForBrowser
 {
     public class Startup
     {
@@ -25,17 +23,16 @@ namespace BFF
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+            services.AddControllers();
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "BackendForBrowser", Version = "v1"}); });
             //批量注册QueryService
             services.Scan(scan => scan.FromAssemblyOf<UserQueryService>()
                 .AddClasses(classes =>
                     classes.Where(@class => @class.Name.EndsWith("QueryService", StringComparison.OrdinalIgnoreCase)))
                 .AsSelf().WithScopedLifetime());
-            //由于Q端直接连数据库，以下示范不同数据库的注册
+            //Q端直连接从库，以下示范不同数据库的注册
             services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(
-                "Host=192.168.78.140;Username=postgres;Password=postgres;Database=postgres"));
+                "Host=192.168.78.142;Username=postgres;Password=postgres;Database=postgres"));
             // services.AddScoped<IDbConnection>(_ => new SqlConnection(
             //     "server=192.168.78.140;database=TestDB;User=sa;password=123;Connect Timeout=30;Pooling=true;Min Pool Size=100;"));
             // services.AddScoped<IDbConnection>(_ => new MySqlConnection(
@@ -48,42 +45,17 @@ namespace BFF
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BackendForBrowser v1"));
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-            });
+            app.UseAuthorization();
 
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
