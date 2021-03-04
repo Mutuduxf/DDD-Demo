@@ -9,6 +9,10 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.3" NoWarn="NU1605" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
         <PackageReference Include="Zaabee.Extensions.Configuration.Consul" Version="2021.1.0" />
+        <PackageReference Include="Zaabee.RabbitMQ" Version="2021.1.0" />
+        <PackageReference Include="Zaabee.RabbitMQ.NewtonsoftJson" Version="2021.1.0" />
+        <PackageReference Include="Zaabee.StackExchangeRedis" Version="2021.1.0" />
+        <PackageReference Include="Zaabee.StackExchangeRedis.MsgPack" Version="2021.1.0" />
         <PackageReference Include="Zaaby.DDD" Version="2020.5.0" />
     </ItemGroup>
 

@@ -13,6 +13,8 @@
         <PackageReference Include="Scrutor" Version="3.3.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
         <PackageReference Include="Zaabee.Extensions.Configuration.Consul" Version="2021.1.0" />
+        <PackageReference Include="Zaabee.StackExchangeRedis" Version="2021.1.0" />
+        <PackageReference Include="Zaabee.StackExchangeRedis.MsgPack" Version="2021.1.0" />
     </ItemGroup>
 
     <ItemGroup>

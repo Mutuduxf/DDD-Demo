@@ -8,6 +8,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Npgsql;
 using QueryService;
+using Zaabee.Extensions.Configuration.Consul;
+using Zaabee.StackExchangeRedis;
+using Zaabee.StackExchangeRedis.Abstractions;
+using Zaabee.StackExchangeRedis.MsgPack;
 
 namespace BackendForBrowser
 {
@@ -24,19 +28,35 @@ namespace BackendForBrowser
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "BackendForBrowser", Version = "v1"}); });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "BackendForBrowser", Version = "v1"});
+            });
+
+            //通过Consul配置中心生成配置
+            var configBuilder = new ConfigurationBuilder()
+                .AddConsul(c =>
+                {
+                    c.Address = new Uri("http://192.168.78.140:8500");
+                    c.Datacenter = "dc1";
+                    c.WaitTime = TimeSpan.FromSeconds(30);
+                });
+            var config = configBuilder.Build();
+
             //批量注册QueryService
             services.Scan(scan => scan.FromAssemblyOf<UserQueryService>()
                 .AddClasses(classes =>
                     classes.Where(@class => @class.Name.EndsWith("QueryService", StringComparison.OrdinalIgnoreCase)))
                 .AsSelf().WithScopedLifetime());
-            //Q端直连接从库，以下示范不同数据库的注册
-            services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(
-                "Host=192.168.78.142;Username=postgres;Password=postgres;Database=postgres"));
-            // services.AddScoped<IDbConnection>(_ => new SqlConnection(
-            //     "server=192.168.78.140;database=TestDB;User=sa;password=123;Connect Timeout=30;Pooling=true;Min Pool Size=100;"));
-            // services.AddScoped<IDbConnection>(_ => new MySqlConnection(
-            //     "Database=TestDB;Data Source=192.168.78.140;User Id=root;Password=123;CharSet=utf8;port=3306"));
+
+            //Q端直连接从库
+            services.AddScoped<IDbConnection>(
+                _ => new NpgsqlConnection(config.GetSection("PgSqlStandby").Get<string>()));
+
+            //Redis
+            services.AddSingleton<IZaabeeRedisClient>(new ZaabeeRedisClient(
+                config.GetSection("Redis").Get<string>(),
+                TimeSpan.FromSeconds(30), new Serializer()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
