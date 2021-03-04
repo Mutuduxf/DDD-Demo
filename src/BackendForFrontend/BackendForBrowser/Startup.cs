@@ -1,17 +1,11 @@
 using System;
-using System.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Npgsql;
-using QueryService;
 using Zaabee.Extensions.Configuration.Consul;
-using Zaabee.StackExchangeRedis;
-using Zaabee.StackExchangeRedis.Abstractions;
-using Zaabee.StackExchangeRedis.MsgPack;
 
 namespace BackendForBrowser
 {
@@ -44,19 +38,11 @@ namespace BackendForBrowser
             var config = configBuilder.Build();
 
             //批量注册QueryService
-            services.Scan(scan => scan.FromAssemblyOf<UserQueryService>()
-                .AddClasses(classes =>
-                    classes.Where(@class => @class.Name.EndsWith("QueryService", StringComparison.OrdinalIgnoreCase)))
-                .AsSelf().WithScopedLifetime());
-
-            //Q端直连接从库
-            services.AddScoped<IDbConnection>(
-                _ => new NpgsqlConnection(config.GetSection("PgSqlStandby").Get<string>()));
-
-            //Redis
-            services.AddSingleton<IZaabeeRedisClient>(new ZaabeeRedisClient(
-                config.GetSection("Redis").Get<string>(),
-                TimeSpan.FromSeconds(30), new Serializer()));
+            services.AddQueryService()
+                //Q端连接从库
+                .AddDbConnection(config)
+                //Redis
+                .AddRedis(config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
