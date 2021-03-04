@@ -24,6 +24,11 @@ namespace ServiceHost
         {
             services.AddControllers();
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "MicroService", Version = "v1"});
+            });
+
             //通过Consul配置中心生成配置
             var configBuilder = new ConfigurationBuilder()
                 .AddConsul(c =>
@@ -42,11 +47,6 @@ namespace ServiceHost
                 .AddRedis(config)
                 //注册RabbitMQ
                 .AddRabbitMq(config);
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "MicroService", Version = "v1"});
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

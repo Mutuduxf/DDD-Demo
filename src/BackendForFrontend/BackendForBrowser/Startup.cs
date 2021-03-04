@@ -36,13 +36,10 @@ namespace BackendForBrowser
                     c.WaitTime = TimeSpan.FromSeconds(30);
                 });
             var config = configBuilder.Build();
-
-            //批量注册QueryService
-            services.AddQueryService()
-                //Q端连接从库
-                .AddDbConnection(config)
-                //Redis
-                .AddRedis(config);
+            
+            services.AddQueryService()      //批量注册QueryService
+                .AddDbConnection(config)    //Q端连接从库
+                .AddRedis(config);          //Redis
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
