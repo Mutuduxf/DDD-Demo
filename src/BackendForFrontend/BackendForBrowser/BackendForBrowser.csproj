@@ -5,15 +5,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.4" NoWarn="NU1605" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.4" NoWarn="NU1605" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.5" NoWarn="NU1605" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.2" />
         <PackageReference Include="MySql.Data" Version="8.0.23" />
-        <PackageReference Include="Npgsql" Version="5.0.3" />
+        <PackageReference Include="Npgsql" Version="5.0.4" />
         <PackageReference Include="Scrutor" Version="3.3.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-        <PackageReference Include="Zaabee.Extensions.Configuration.Consul" Version="2021.1.0" />
-        <PackageReference Include="Zaabee.StackExchangeRedis" Version="2021.1.0" />
+        <PackageReference Include="Zaabee.Extensions.Configuration.Consul" Version="2021.2.0" />
+        <PackageReference Include="Zaabee.StackExchangeRedis" Version="2021.2.0" />
         <PackageReference Include="Zaabee.StackExchangeRedis.MsgPack" Version="2021.1.0" />
     </ItemGroup>
 
