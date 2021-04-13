@@ -13,7 +13,7 @@
         <PackageReference Include="Zaabee.RabbitMQ.NewtonsoftJson" Version="2021.1.1" />
         <PackageReference Include="Zaabee.StackExchangeRedis" Version="2021.2.0" />
         <PackageReference Include="Zaabee.StackExchangeRedis.MsgPack" Version="2021.1.0" />
-        <PackageReference Include="Zaaby.DDD" Version="2021.1.0" />
+        <PackageReference Include="Zaaby.DDD" Version="2021.2.0" />
     </ItemGroup>
 
     <ItemGroup>

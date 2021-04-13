@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.AggregateRoots;
-using Zaaby.DDD.Abstractions.Infrastructure.Repository;
+using Zaaby.DDD.Abstractions.Infrastructure;
 
 namespace Domain.IRepositories
 {
