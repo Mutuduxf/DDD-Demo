@@ -1,11 +1,9 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Zaabee.Extensions.Configuration.Consul;
 
 namespace BackendForBrowser
 {
@@ -27,19 +25,8 @@ namespace BackendForBrowser
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "BackendForBrowser", Version = "v1"});
             });
 
-            //通过Consul配置中心生成配置
-            var configBuilder = new ConfigurationBuilder()
-                .AddConsul(c =>
-                {
-                    c.Address = new Uri("http://192.168.78.140:8500");
-                    c.Datacenter = "dc1";
-                    c.WaitTime = TimeSpan.FromSeconds(30);
-                });
-            var config = configBuilder.Build();
-            
-            services.AddQueryService()      //批量注册QueryService
-                .AddDbConnection(config)    //Q端连接从库
-                .AddRedis(config);          //Redis
+            services.AddQueryService() //批量注册QueryService
+                .AddDbConnection(Configuration); //Q端连接从库
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

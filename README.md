@@ -17,6 +17,6 @@
 
 ## QuickStart
 
-* 基础设施使用了Consul（配置中心）、PgSql、Redis以及RabbitMQ。
-* 当前使用了Consul作为配置中心，调试运行时可以将ServiceHost和BackendForBrowser中Startup.cs里的consul部分和RabbitMQ以及Redis注释掉，并将PgSql改成自己的连接即可。
+* 使用了Postgres作为数据库，可从[这里](https://hub.docker.com/_/postgres)运行一个Postgres容器进行测试。
+* 此项目为CQS设计，C端（微服务）使用了Postgres主库，Q端（BackendForBrowser）使用了从库，出于方便调试的目的可将两者改为同一个库。
 

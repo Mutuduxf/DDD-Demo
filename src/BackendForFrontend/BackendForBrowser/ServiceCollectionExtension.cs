@@ -4,9 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using QueryService;
-using Zaabee.StackExchangeRedis;
-using Zaabee.StackExchangeRedis.Abstractions;
-using Zaabee.StackExchangeRedis.MsgPack;
 
 namespace BackendForBrowser
 {
@@ -21,18 +18,10 @@ namespace BackendForBrowser
             return services;
         }
 
-        public static IServiceCollection AddDbConnection(this IServiceCollection services, IConfigurationRoot config)
+        public static IServiceCollection AddDbConnection(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IDbConnection>(
                 _ => new NpgsqlConnection(config.GetSection("PgSqlStandby").Get<string>()));
-            return services;
-        }
-
-        public static IServiceCollection AddRedis(this IServiceCollection services, IConfigurationRoot config)
-        {
-            services.AddSingleton<IZaabeeRedisClient>(new ZaabeeRedisClient(
-                config.GetSection("Redis").Get<string>(),
-                TimeSpan.FromSeconds(30), new Serializer()));
             return services;
         }
     }
